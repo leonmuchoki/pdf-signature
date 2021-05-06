@@ -6,7 +6,8 @@ import {
   ViewChild
 } from "@angular/core";
 import * as pdfjsLib from "pdfjs-dist";
-import { jsPDF } from "jspdf";
+import {jsPDF} from "jspdf";
+import domtoimage from "dom-to-image";
 
 @Component({
   selector: "app-pdf-viewer",
@@ -66,11 +67,17 @@ export class PdfViewerComponent implements OnInit, AfterViewInit {
   }
 
   savePDF(): void {
-    var imgData = this.pdfcanvas.nativeElement.toDataURL("image/jpeg", 1.0);
-    var pdfDoc = new jsPDF();
-    pdfDoc.html(this.pdfcanvas.nativeElement).then(()=>pdfDoc.save('test.pdf'));
-
-    //pdf.addImage(imgData, 'JPEG', 0, 0,);
-    //pdf.save("download.pdf");
+    const divHeight = this.pdfcanvas.nativeElement.clientHeight;
+    const divWidth = this.pdfcanvas.nativeElement.clientWidth;
+    const options = { background: 'white', width: divWidth, height: divHeight };
+  
+    domtoimage.toPng(this.pdfcanvas.nativeElement, options).then((imgData) => {
+      const doc = new jsPDF('p', 'mm', [divWidth, divHeight]);
+      const imgProps = doc.getImageProperties(imgData);
+      const pdfWidth = doc.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      doc.save('pdfDocument.pdf');
+    });
   }
 }
