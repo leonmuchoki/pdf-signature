@@ -1,0 +1,10 @@
+<div>
+  <div appDroppable [options]="{ accept: '.drag-me' }" style="border:1px solid black;display:flex; flex-direction:column; justify-content: center; padding: 10px;">
+    <div style="flex-grow: 1; margin-left: auto;">
+      <button class="btn btn-primary btn-md" (click)="savePDF()">SAVE</button>
+    </div>
+    <div>
+      <canvas id="pdf-canvas" #pdfcanvas style="flex-grow: 2;padding: 30px;background-color:transparent;"></canvas>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div *ngIf="showSignPad" style="border:1px solid black;">
+  <span>Draw signature here:</span>
+  <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"
+    (onSave)="onSaveHandler($event)" (onClear)="onClearHandler()">
+  </signature-pad>
+</div>
+
+<div *ngIf="showSignImage" style="border:1px solid black;">
+  <div class="drag-me" appDraggable>
+    <img [src]="imagePath" width="200" height="200" />
+  </div>
+  <button (click)="retrySignature()">RETRY</button>
+</div>
